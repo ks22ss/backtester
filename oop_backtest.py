@@ -85,6 +85,10 @@ class BacktestRunner(ABC):
             # updated total position lots after closing position, avg price unchange
             self.pos_list[0][0] = self.pos_list[0][0] - pos_close_lots
             
+            # If all position close, reset
+            if self.pos_list[0][0] == 0:
+                self.pos_list = [(0,0)]
+            
             self.records['trade_close_list'].append((pos_close_lots, pos_close_price))
         else:
             raise Exception("Error when closing position. Number of Lots exceed position lots")
@@ -137,6 +141,9 @@ class BacktestRunner(ABC):
                 
             self.onData(i, params)
         
+        
+            if is_last and self.pos_list[0][0] != 0:
+                self.close_position(self.market_data(i,'close'), self.pos_list[0][0])
         
 
 
