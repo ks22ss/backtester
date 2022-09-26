@@ -20,6 +20,7 @@ print(weighted_average([(50,10),(20,11),(-70, 12)]))
 
 
 class BacktestRunner(ABC):
+    """BacktestRunner Version 0.0.1"""
     
     def __init__(self, df, warm_up, lot_size, debug=True):
         self.debug = debug
@@ -65,6 +66,8 @@ class BacktestRunner(ABC):
                 [Position Open] {pos_open_lots} Lots @ Price = {pos_open_price}
             """)
         self.records['trade_open_list'].append((pos_open_lots, pos_open_price))
+        
+        return True
     
     
     def close_position(self, pos_close_price, pos_close_lots):
@@ -90,6 +93,9 @@ class BacktestRunner(ABC):
                 self.pos_list = [(0,0)]
             
             self.records['trade_close_list'].append((pos_close_lots, pos_close_price))
+            
+            return True
+            
         else:
             raise Exception("Error when closing position. Number of Lots exceed position lots")
         
@@ -118,7 +124,7 @@ class BacktestRunner(ABC):
             self.records['equity_list'].append(equity)
             
             highest_equity = max(self.records['equity_list'])
-            print(type(highest_equity))
+
             dd_dollar = highest_equity - equity
             dd_pct = (equity / highest_equity) - 1
             self.records['dd_dollar_list'].append(dd_dollar)
@@ -179,4 +185,6 @@ params = {}
 df = pd.DataFrame(data)                
 strategy = Strategy(df, 1, 100)
 strategy.create_backtest(params)
+
+
 
