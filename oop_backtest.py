@@ -51,8 +51,6 @@ class BacktestRunner(ABC):
             raise Exception(f"Column name {name} not found in df.")
     
     def open_position(self, pos_open_price, pos_open_lots):
-
-
         # updated total position lots and average open price after opening position
         self.pos_list.append((pos_open_lots, pos_open_price))
         avg_open_price = weighted_average(self.pos_list)
@@ -71,7 +69,6 @@ class BacktestRunner(ABC):
     
     
     def close_position(self, pos_close_price, pos_close_lots):
-
         if self.pos_list[0][0] >= pos_close_lots:
             
             shares = pos_close_lots * self.lot_size
@@ -134,7 +131,6 @@ class BacktestRunner(ABC):
             
             if self.debug:
                 print(f"""\n
-                
                     avg_open_price: {self.pos_list[0][1]}
                     pos_lots : {self.pos_list[0][0]}
                     unrealize_pnl: {unrealize_pnl}
@@ -147,7 +143,7 @@ class BacktestRunner(ABC):
                 
             self.onData(i, params)
         
-        
+            is_last = i == (len(self.df) - 1)
             if is_last and self.pos_list[0][0] != 0:
                 self.close_position(self.market_data(i,'close'), self.pos_list[0][0])
         
@@ -187,4 +183,4 @@ strategy = Strategy(df, 1, 100)
 strategy.create_backtest(params)
 
 
-
+                
