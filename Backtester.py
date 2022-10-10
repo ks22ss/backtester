@@ -5,43 +5,32 @@ from typing import List, Dict
 from abc import ABC, abstractmethod
 import numpy as np
 import yfinance as yf
-import hkfdb
-import time
-import copy
+from dataclasses import dataclass, field
 
 pd.set_option('display.max_column', None)
 pd.set_option('display.max_row', None)
 pd.set_option('display.width', 320)
 
+
+def create_empty_list():
+    return []
+
+@dataclass
 class Context:
-    def __init__(self):
-        self.open_price = 0
-        self.realized_pnl_list = []
-        self.initial_capital = 100000
-        self.last_realized_capital = 100000
-        self.num_of_share = 0
-        self.equity_value_list = []
-        self.dd_dollar_list = []
-        self.dd_pct_list = []
-        self.lot_size = 100
-        self.commission_rate = 0.0003
-        self.min_commission = 3
-        self.platform_fee = 15
+        open_price: float = 0
+        realized_pnl_list: List[float] =  field(default_factory=create_empty_list)
+        initial_capital: float = 100000
+        last_realized_capital: float = 100000
+        num_of_share: int = 0
+        equity_value_list: List[float] =  field(default_factory=create_empty_list)
+        dd_dollar_list: List[float] =  field(default_factory=create_empty_list)
+        dd_pct_list: List[float] =  field(default_factory=create_empty_list)
+        lot_size: int = 100
+        commission_rate: float = 0.0003
+        min_commission: float = 3
+        platform_fee: float  = 15
 
-    def show(self):
-        print(f"open_price: {self.open_price}")
-        print(f"realized_pnl_list: {self.realized_pnl_list}")
-        print(f"initial_capital: {self.initial_capital}")
-        print(f"last_realized_capital: {self.last_realized_capital}")
-        print(f"num_of_share: {self.num_of_share}")
-        print(f"equity_value_list: {self.equity_value_list}")
-        print(f"dd_dollar_list: {self.dd_dollar_list}")
-        print(f"dd_pct_list: {self.dd_pct_list}")
-        print(f"lot_size: {self.lot_size}")
-        print(f"commission_rate: {self.commission_rate}")
-        print(f"min_commission: {self.min_commission}")
-        print(f"platform_fee: {self.platform_fee}")
-
+print(Context().initial_capital)
         
 
 class Backtester:
@@ -247,7 +236,6 @@ class Backtester:
             self.df_running.at[self.context.i, 'mdd_dollar'] = self.context.mdd_dollar
             self.df_running.at[self.context.i, 'mdd_pct'] = self.context.mdd_pct
 
-            #self.context.show()
             #print(self.df_running)
             #time.sleep(12345)
 

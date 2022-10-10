@@ -1,4 +1,4 @@
-from Backtest import Backtester
+from Backtester import Backtester
 import yfinance as yf
 
 class MyCustomStrategy(Backtester):
